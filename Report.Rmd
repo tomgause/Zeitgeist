@@ -1,0 +1,79 @@
+---
+title: "Zeitgeist Analysis"
+author: "Tom Gause and Liam O'Brien"
+date: "May 20, 2022"
+header-includes:
+- \usepackage{listings}
+- \usepackage{amsmath, amsthm, amssymb, amsfonts}
+- \usepackage{graphicx}
+output: 
+- pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Introduction    
+For the past four years at Middlebury College, a small team of students who write for the Middlebury Campus, the school's student newspaper, have designed a survey called the Zeitgeist. The intent of this survey is to get a basic idea of student behavior and attitude on campus. The survey is totally anonymous, and this lets the Zeitgeist team ask a range of sensitive questions such as "Have you ever broken the Honor Code?", "Have you been a victim of sexual assault?", and "Are you happy"? Each year, this survey, which takes 10-20 minutes to complete, is sent to the entire student body. When the responses are collected, the Middlebury Campus analyzes the data and releases an article summarizing some of the significant results of the survey (note that this article shares statistics only, the Zeitgeist team avoids any opinion writing). The Zeitgeist project is the largest and most comprehensive student census at Middlebury.   
+In Spring 2022, the Zeitgeist team released the Zeitgeist 4.0. They collected 1,134 responses, and later a \href{https://www.middleburycampus.com/article/2022/05/zeitgeist-4-0-2022}{summary article}. For our final project, we chose to answer the following question: are the Zietgeist 4.0 respondents representative of the Middlebury student population?   
+Our null hypothesis is: The Zeitgeist is representative of the Middlebury student population. To evaluate this hypothesis, we used 5 metrics--class year, gender, ethnicity, geographic distribution, and major[s]--and collected data for each of these metrics from the Zeitgeist summary post referenced above. As our ground truth data, we collected data from the college.
+LIAM EXPLAIN HOW DATA WAS COLLECTED HERE.  
+``` {r 1}
+Gender.Z = c("Cisgender Female", "Cisgender Male", "Non-Binary", 
+             "I prefer not to answer", "Transgender Male", "Transgender Female",
+             "These options don't define me")
+vals = c(652, 401, 63, 10, 13, 5, 21)
+Gender.Data <- data.frame(Gender = Gender.Z,
+                          Zeitgeist = vals)
+
+# Row 0 refers to "I prefer not to answer"
+Class.Z = c(2022, 2022.5, 2023, 2023.5, 2024, 2024.5, 2025, 2025.5, 0)
+vals = c(180, 80, 190, 79, 242, 73, 236, 50, 4)
+Class.Data <- data.frame(Gender = Class.Z,
+                         Zeitgeist = vals)
+
+# This data is tricky, because students had the option to check
+# all boxes that applied
+Race.Z = c("White", "Asian", "Hispanic or Latino Origin", "Black or African American", "Middle Eastern or North African", "I prefer not to answer", "American Indian or Alaskan Native", "Native Hawaiian or other Pacific Islander")
+vals = c(911, 173, 96, 57, 17, 13, 8, 5)
+Race.Data <- data.frame(Race = Race.Z,
+                        Zeitgeist = vals)
+
+Geography.Z = c("New England", "Mideast", "Southeast", "Great Lakes", "Plains", "Southwest", "Rocky Mountain", "Far West", "Inernational/Outside the U.S.", "I prefer not to answer")
+vals = c(340, 272, 101, 63, 43, 33, 39, 136, 103, 4)
+Geography.Data <- data.frame(Geographic.Location = Geography.Z,
+                             Zeitgeist = vals)
+
+Majors.Z = c("Undeclared", "Environmental Studies", "Economics", "Political Science", "Neuroscience", "Computer Science", "English & American Literatures", "Psychology", "International and Global Studies", "Molecular Biology and Biochemistry", "Biology", "Mathematics", "International Politics and Economics", "History", "History of Art & Architecture", "Film and Media Culture", "Geography", "Anthropology", "Physics", "Spanish", "Chemistry", "Sociology", "Theatre", "Education Studies", "Music", "Philosophy", "Chinese", "Geology", "Biochemistry", "Independent Scholar", "Studio Art", "I prefer not to answer", "Arabic", "Gender, Sexuality and Feminist Studies", "German", "Classics", "Japanese Studies", "Dance", "Russian", "French", "Religion", "American Studies", "Comparitive Literature", "Literature Studies", "Sociology/Anthropology", "Black Studies")
+vals = c(162, 125, 113, 70, 68, 88, 60, 58, 50, 38, 35, 48, 44, 35, 33, 30, 25, 24, 25, 23, 22, 21, 17, 17, 15, 14, 13, 11, 10, 10, 7, 12, 12, 12, 12, 6, 5, 5, 5, 4, 4, 3, 3, 3, 3, 2)
+Major.Data <- data.frame(Major = Majors.Z,
+                         Zeitgeist = vals)
+
+```
+
+2) Methods: Describe the methodology you used (i.e., the types of statistical tech-
+niques) to answer your research questions. You should describe the data in greater
+detail in this section. Any descriptions of estimators to be used, calculations of
+bias, details about simulations, etc. belong here. You can also use this section
+to be critical of your own sampling scheme. Did things go as planned? Was your
+sample really “random,” whatever that means in context?
+3) Results: Describe the results of your analyses, simulations, etc. and demonstrate
+graphs and other output that accompany/enhance these results.
+4) Conclusion: Explain how your research question was answered and what possible
+meaningful takeaway you/the reader should have.
+
+
+Are the Zeitgeist respondents representative of the Middlebury student population?
+
+``` {r 1}
+```
+
+
+
+
+
+
+
+
+

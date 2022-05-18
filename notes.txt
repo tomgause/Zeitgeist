@@ -1,0 +1,5 @@
+1) Devise a research question(s).
+2) Identify population parameter(s) of interest.
+3) Construct and carry out a data-collection/sampling scheme to test the research question of interest.
+4) Assess your research question(s).
+5) Write a report detailing your findings, paying careful attention to the assumptions that you made along the way.
