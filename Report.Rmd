@@ -20,29 +20,36 @@ In Spring 2022, the Zeitgeist team released the Zeitgeist 4.0. They collected 1,
 Our null hypothesis is: The Zeitgeist is representative of the Middlebury student population. To evaluate this hypothesis, we used 5 metrics--class year, gender, ethnicity, geographic distribution, and major[s]--and collected data for each of these metrics from the Zeitgeist summary post referenced above. As our ground truth data, we collected data from the college.
 LIAM EXPLAIN HOW DATA WAS COLLECTED HERE.  
 ``` {r 1}
-Gender.Z = c("Cisgender Female", "Cisgender Male", "Non-Binary", 
+Gender <- c("Cisgender Female", "Cisgender Male", "Non-Binary", 
              "I prefer not to answer", "Transgender Male", "Transgender Female",
              "These options don't define me")
-vals = c(652, 401, 63, 10, 13, 5, 21)
-Gender.Data <- data.frame(Gender = Gender.Z,
-                          Zeitgeist = vals)
+vals.Z <- c(652, 401, 63, 10, 13, 5, 21)
+# The data from Middlebury only has binary options for "Women" and "Men"
+vals.M <- c(1416, 1240, 0, 0, 0, 0, 0)
+Gender.Data <- data.frame(Gender = Gender,
+                          Zeitgeist = vals.Z,
+                          Middlebury = vals.M)
 
 # Row 0 refers to "I prefer not to answer"
-Class.Z = c(2022, 2022.5, 2023, 2023.5, 2024, 2024.5, 2025, 2025.5, 0)
-vals = c(180, 80, 190, 79, 242, 73, 236, 50, 4)
+Class.Z <- c(2022, 2022.5, 2023, 2023.5, 2024, 2024.5, 2025, 2025.5, 0)
+vals.Z <- c(180, 80, 190, 79, 242, 73, 236, 50, 4)
 Class.Data <- data.frame(Gender = Class.Z,
                          Zeitgeist = vals)
 
 # This data is tricky, because students had the option to check
 # all boxes that applied
-Race.Z = c("White", "Asian", "Hispanic or Latino Origin", "Black or African American", "Middle Eastern or North African", "I prefer not to answer", "American Indian or Alaskan Native", "Native Hawaiian or other Pacific Islander")
-vals = c(911, 173, 96, 57, 17, 13, 8, 5)
-Race.Data <- data.frame(Race = Race.Z,
-                        Zeitgeist = vals)
+Race <- c("White", "Asian", "Hispanic or Latino Origin", "Black or African American", "Middle Eastern or North African", "I prefer not to answer", "American Indian or Alaskan Native", "Native Hawaiian or other Pacific Islander", "International", "Two or more races", "Race and/or ethnicity unknown")
+vals.Z <- c(911, 173, 96, 57, 17, 13, 8, 5, 0, 0, 0)
+# "Middle Eastern or North African" and "I prefer not to answer" are not categories in Middlebury's data
+# "International", "Two or more races", and "Race and/or ethnicity unknown" were additional categories in Middlebury data
+vals.M <- c(1556, 199, 287, 125, 0, 0, 3, 0, 308, 157, 19)
+Race.Data <- data.frame(Race = Race,
+                        Zeitgeist = vals.Z,
+                        Middlebury = vals.M)
 
-Geography.Z = c("New England", "Mideast", "Southeast", "Great Lakes", "Plains", "Southwest", "Rocky Mountain", "Far West", "Inernational/Outside the U.S.", "I prefer not to answer")
-vals = c(340, 272, 101, 63, 43, 33, 39, 136, 103, 4)
-Geography.Data <- data.frame(Geographic.Location = Geography.Z,
+Geography <- c("New England", "Mideast", "Southeast", "Great Lakes", "Plains", "Southwest", "Rocky Mountain", "Far West", "Inernational/Outside the U.S.", "I prefer not to answer")
+vals <- c(340, 272, 101, 63, 43, 33, 39, 136, 103, 4)
+Geography.Data <- data.frame(Geographic.Location = Geography,
                              Zeitgeist = vals)
 
 Majors.Z = c("Undeclared", "Environmental Studies", "Economics", "Political Science", "Neuroscience", "Computer Science", "English & American Literatures", "Psychology", "International and Global Studies", "Molecular Biology and Biochemistry", "Biology", "Mathematics", "International Politics and Economics", "History", "History of Art & Architecture", "Film and Media Culture", "Geography", "Anthropology", "Physics", "Spanish", "Chemistry", "Sociology", "Theatre", "Education Studies", "Music", "Philosophy", "Chinese", "Geology", "Biochemistry", "Independent Scholar", "Studio Art", "I prefer not to answer", "Arabic", "Gender, Sexuality and Feminist Studies", "German", "Classics", "Japanese Studies", "Dance", "Russian", "French", "Religion", "American Studies", "Comparitive Literature", "Literature Studies", "Sociology/Anthropology", "Black Studies")
