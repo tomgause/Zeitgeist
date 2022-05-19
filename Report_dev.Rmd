@@ -29,11 +29,6 @@ Gender.Data.Raw <- data.frame(Gender = Gender,
                           Zeitgeist = vals.Z,
                           Middlebury = vals.M)
 
-FinAid <- c("Yes", "No")
-vals.Z <- c(485, 639)
-# Middlebury data is from Fall 2021, not Spring 2022.
-vals.M <- c(1315, 1520)
-
 # Extra row ommitted, 4 "prefer not to answer"
 Class.Z <- c(2022, 2022.5, 2023, 2023.5, 2024, 2024.5, 2025, 2025.5, 0)
 vals.Z <- c(180, 80, 190, 79, 242, 73, 236, 50, 4)
@@ -94,7 +89,8 @@ As we are testing our hypothesis with a large number of variables, we pre-planne
 ##### Gender  
 All of the questions in the Zeitgeist included an "I prefer not to answer" option. This option was provided for numerous reasons--some respondents may have felt that the options provided did not apply to them, others may have been concerned that an adversary on the Zeitgeist Team would discover their identity from the provided information and use their data in a malicious manner. For the variables we chose to test, less than $1%$ of respondents selected the "I prefer not to answer" option. For this reason, we have ommited this category from the data for all variables for the initial testing phase.  
 
-After removing the "I prefer not to answer" data, the Financial Aid and Class Year variables matched trivially and were deemed ready for permutation testing.
+After removing the "I prefer not to answer" data, the Class Year variable matched trivially and was deemed ready for permutation testing.  
+
 The Zeitgeist included seven multiple-choice options for gender-identification: Cisgender Female, Cisgender Male, Non-Binary, Transgender Male, Transgender Female, These Options Don't Define Me, and I Prefer Not to Answer. Administration only had two categories: Female, Male. We chose to consider only the following statistics: Cisgender Female (Zeitgeist)::Female (Admin) and Cisgender Male (Zeitgeist)::Male (Admin). This decision was made to uphold statistical rigor and avoid mis-gendering Zeitgeist respondents. We regret that folks who selected genders other than Cisgender Female and Cisgender Male were forced to select Female or Male in their College Applications.  
 
 Total responses for gender: 1280
