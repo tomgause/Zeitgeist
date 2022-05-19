@@ -37,8 +37,18 @@ vals.M <- c(1315, 1520)
 # Extra row ommitted, 4 "prefer not to answer"
 Class.Z <- c(2022, 2022.5, 2023, 2023.5, 2024, 2024.5, 2025, 2025.5, 0)
 vals.Z <- c(180, 80, 190, 79, 242, 73, 236, 50, 4)
-Class.Data.Raw <- data.frame(Gender = Class.Z,
+Class.M <- c(2022,2023,2024,2025)
+# Rounded data based on proportions from fall 2021
+vals.M <- c(600,690,727,638)
+Class.Data.Z <- data.frame(Gender = Class.Z,
                          Zeitgeist = vals.Z)
+
+# We assume that the administration combined feb and reg classes
+vals.Z2 <- c(180+80, 190+79, 242+73, 236+50)
+
+Class.Data.Raw <- data.frame(Gender = Class.M,
+                             Zeitgeist = vals.Z2,
+                             Middlebury = vals.M)
 
 # This data is tricky, because students had the option to check
 # all boxes that applied
