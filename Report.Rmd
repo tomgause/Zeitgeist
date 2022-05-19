@@ -41,7 +41,7 @@ Class.Data <- data.frame(Gender = Class.Z,
 Race <- c("White", "Asian", "Hispanic or Latino Origin", "Black or African American", "Middle Eastern or North African", "I prefer not to answer", "American Indian or Alaskan Native", "Native Hawaiian or other Pacific Islander", "International", "Two or more races", "Race and/or ethnicity unknown")
 vals.Z <- c(911, 173, 96, 57, 17, 13, 8, 5, 0, 0, 0)
 # "Middle Eastern or North African" and "I prefer not to answer" are not categories in Middlebury's data
-# "International", "Two or more races", and "Race and/or ethnicity unknown" were additional categories in Middlebury data
+# "International", "Two or more races", and "Race and/or ethnicity unknown" are additional categories in Middlebury data
 vals.M <- c(1556, 199, 287, 125, 0, 0, 3, 0, 308, 157, 19)
 Race.Data <- data.frame(Race = Race,
                         Zeitgeist = vals.Z,
