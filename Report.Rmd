@@ -52,10 +52,29 @@ vals <- c(340, 272, 101, 63, 43, 33, 39, 136, 103, 4)
 Geography.Data <- data.frame(Geographic.Location = Geography,
                              Zeitgeist = vals)
 
-Majors.Z = c("Undeclared", "Environmental Studies", "Economics", "Political Science", "Neuroscience", "Computer Science", "English & American Literatures", "Psychology", "International and Global Studies", "Molecular Biology and Biochemistry", "Biology", "Mathematics", "International Politics and Economics", "History", "History of Art & Architecture", "Film and Media Culture", "Geography", "Anthropology", "Physics", "Spanish", "Chemistry", "Sociology", "Theatre", "Education Studies", "Music", "Philosophy", "Chinese", "Geology", "Biochemistry", "Independent Scholar", "Studio Art", "I prefer not to answer", "Arabic", "Gender, Sexuality and Feminist Studies", "German", "Classics", "Japanese Studies", "Dance", "Russian", "French", "Religion", "American Studies", "Comparitive Literature", "Literature Studies", "Sociology/Anthropology", "Black Studies")
-vals = c(162, 125, 113, 70, 68, 88, 60, 58, 50, 38, 35, 48, 44, 35, 33, 30, 25, 24, 25, 23, 22, 21, 17, 17, 15, 14, 13, 11, 10, 10, 7, 12, 12, 12, 12, 6, 5, 5, 5, 4, 4, 3, 3, 3, 3, 2)
-Major.Data <- data.frame(Major = Majors.Z,
-                         Zeitgeist = vals)
+Majors.Z <- c("Undeclared", "Environmental Studies", "Economics", "Political Science", "Neuroscience", "Computer Science", "English & American Literatures", "Psychology", "International and Global Studies", "Molecular Biology and Biochemistry", "Biology", "Mathematics", "International Politics and Economics", "History", "History of Art & Architecture", "Film and Media Culture", "Geography", "Anthropology", "Physics", "Spanish", "Chemistry", "Sociology", "Theatre", "Education Studies", "Music", "Philosophy", "Chinese", "Geology", "Biochemistry", "Independent Scholar", "Studio Art", "I prefer not to answer", "Arabic", "Gender, Sexuality and Feminist Studies", "German", "Classics", "Japanese Studies", "Dance", "Russian", "French", "Religion", "American Studies", "Comparitive Literature", "Literature Studies", "Sociology/Anthropology", "Black Studies")
+vals.Z <- c(162, 125, 113, 70, 68, 88, 60, 58, 50, 38, 35, 48, 44, 35, 33, 30, 25, 24, 25, 23, 22, 21, 17, 17, 15, 14, 13, 11, 10, 10, 7, 12, 12, 12, 12, 6, 5, 5, 5, 4, 4, 3, 3, 3, 3, 2)
+Major.Data.Z <- data.frame(Major = Majors.Z,
+                         Zeitgeist = vals.Z)
+                         
+Majors.M <- c("Dance","Film & Media Culture","Music","Studio Art","Theatre","Classics",
+"Classical Studies","History","History-Science, Medicine, and Technology",
+"Architectural Studies","Art History and Museum Studies","Philosophy","Religion",                                 
+"American Studies","Black Studies","Environmental Studies","Gender Sexuality, & Feminist Studies",     
+"Independent Scholar","International Politics & Economics","International & Global Studies",         
+"Neuroscience","Arabic","Chinese","French & Francophone Studies","German",                                  
+"Italian","Japanese Studies","Russian","Spanish","Comparative Literature",                 
+"English & American Literatures","Literary Studies","Biochemistry","Biology",                                  
+"Chemistry","Computer Science","Geology","Mathematics","Molecular Biology & Biochemistry",         
+"Physics","Economics","Elementary Education","Secondary Education","Geography",                                
+"Political Science","Psychology","Anthropology","Sociology","Undeclared")
+
+vals.M <- c(5,43,19,15,21,5,4,55,0,44,17,24,11,8,3,166,13,6,80,75,152,9,
+                20,7,8,3,14,7,21,5,93,7,20,86,29,158,29,68,80,46,298,7,6,34,
+                99,118,41,30,923)
+                
+Major.Data.M <- data.frame(Major = Majors.M,
+                           Middlebury = vals.M)
 
 ```
 
