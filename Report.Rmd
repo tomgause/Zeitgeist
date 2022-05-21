@@ -40,13 +40,13 @@ vals.Z <- c(180, 80, 190, 79, 242, 73, 236, 50, 4)
 Class.M <- c(2022,2023,2024,2025)
 # Rounded data based on proportions from fall 2021
 vals.M <- c(600,690,727,638)
-Class.Data.Z <- data.frame(Gender = Class.Z,
+Class.Data.Z <- data.frame(Class = Class.Z,
                          Zeitgeist = vals.Z)
 
 # We assume that the administration combined feb and reg classes
 vals.Z2 <- c(180+80, 190+79, 242+73, 236+50)
 
-Class.Data.Raw <- data.frame(Gender = Class.M,
+Class.Data.Raw <- data.frame(Class = Class.M,
                              Zeitgeist = vals.Z2,
                              Middlebury = vals.M)
 
@@ -118,7 +118,7 @@ Major.Data.Raw <- merge(Major.Data.M, Major.Data.Z, by = "Major", all = TRUE)
 ```  
   
 # Methods    
-As we are testing our hypothesis with a large number of variables, we pre-planned the following steps to avoid a false-positive, i.e. avoid p-hacking. First, we decided to only run permutation tests, and we established that a p-value resulting from a hypothesis test must be $<0.03$ to be considered statisticaally significant, lower than the traditional $<0.05$. This reduces the probability of a false positive rejection by $40%$. Next, there is some variation in the features of the Zeitgeist and Middlebury Administration college data. To do analysis, we need to combine or remove some features from both dataset. To avoid bias, these data mutations were made before running our first phase of statistical tests. If the p-values from any of the Phase 1 variable tests came up significant, we would engage in a series of Phase 2 tests where we would alter the data assumptions made about the variables before Phase 1 and re-test against the hypothesis. This process will help ensure any detected significance is not due to falsely made assumptions.  
+As we are testing our hypothesis with a large number of variables, we pre-planned the following steps to avoid a false-positive, i.e. avoid p-hacking. First, we decided to only run permutation tests, and we established that a p-value resulting from a hypothesis test must be $<0.03$ to be considered statisticaally significant, lower than the traditional $<0.05$. This reduces the probability of a false positive rejection by $40%$. Next, there is some variation in the features of the Zeitgeist and Middlebury Administration college data. To do analysis, we need to combine or remove some features from both dataset. To avoid bias, these data mutations were made before running our first phase of statistical tests. If the p-values from any of the Phase 1 variable tests came up significant, we would engage in a series of Phase 2 tests where we would alter the data assumptions made about the variables before Phase 1 and re-test against the hypothesis. This process will help ensure any detected significance is not due to falsely made assumptions.
 
 ### Data Modification Pre Phase 1  
 ##### Gender  
@@ -148,6 +148,116 @@ bias, details about simulations, etc. belong here. You can also use this section
 to be critical of your own sampling scheme. Did things go as planned? Was your
 sample really “random,” whatever that means in context?
 3) Results: Describe the results of your analyses, simulations, etc. and demonstrate graphs and other output that accompany/enhance these results.
+
+```{r}
+N <- 100000
+
+Population <- c(rep("2022", 600), rep("2023", 690),
+                rep("2024", 727), rep("2025",638))
+
+pop.size <- length(Population)
+
+# Expected proportions
+eprop22 <- 600/pop.size
+eprop23 <- 690/pop.size
+eprop24 <- 727/pop.size
+eprop25 <- 638/pop.size
+
+samp.size <- sum(Class.Data.Raw$Zeitgeist)
+
+# Expected values for sample of our size
+epop22 <- eprop22*samp.size
+epop23 <- eprop23*samp.size
+epop24 <- eprop24*samp.size
+epop25 <- eprop25*samp.size
+
+expected.values <- c(epop22, epop23, epop24, epop25)
+
+# test statistic is the sum of (actual - expected)^2
+actual.test.stat <- sum(((Class.Data.Raw$Zeitgeist - expected.values)^2)/expected.values)
+
+test.stat <- NULL
+
+for(i in 1:N){
+  samp <- sample(Population, samp.size, replace = FALSE)
+  
+  samp22 <- sum(samp == "2022")
+  samp23 <- sum(samp == "2023")
+  samp24 <- sum(samp == "2024")
+  samp25 <- sum(samp == "2025")
+  
+  actual.samp.values <- c(samp22,samp23,samp24,samp25)
+  
+  test.stat[i] <- sum(((actual.samp.values - expected.values)^2)/expected.values)
+}
+
+hist(test.stat)
+
+mean(test.stat >= actual.test.stat)
+
+View(Geography.Data.Raw)
+
+Population <- c(rep("New England", 698), rep("Mideast", 604),
+                rep("Southeast", 203), rep("Great Lakes",164),
+                rep("Plains", 70), rep("Southwest", 78),
+                rep("Rocky Mountain",77), rep("Far West", 301))
+
+pop.size <- length(Population)
+
+# Expected proportions
+epropNE <- 698/pop.size
+epropME <- 604/pop.size
+epropSE <- 101/pop.size
+epropGL <- 164/pop.size
+epropP <- 70/pop.size
+epropSW <- 78/pop.size
+epropRM <- 77/pop.size
+epropFW <- 301/pop.size
+
+samp.size <- sum(Geography.Data.Raw$Zeitgeist)
+
+# Expected values in a sample our size
+epopNE <- epropNE*samp.size
+epopME <- epropME*samp.size
+epopSE <- epropSE*samp.size
+epopGL <- epropGL*samp.size
+epopP <- epropP*samp.size
+epopSW <- epropSW*samp.size
+epopRM <- epropRM*samp.size
+epopFW <- epropFW*samp.size
+
+expected.values <- c(epopNE, epopME, epopSE, epopGL,
+                     epopP, epopSW, epopRM, epopFW)
+
+#Don't want last two reponses
+actual.test.stat <- sum(((Geography.Data.Raw$Zeitgeist[1:8] - expected.values)^2)/expected.values)
+
+test.stat <- NULL
+
+for(i in 1:N){
+  samp <- sample(Population, samp.size, replace = FALSE)
+  
+  sampNE <- sum(samp == "New England")
+  sampME <- sum(samp == "Mideast")
+  sampSE <- sum(samp == "Southeast")
+  sampGL <- sum(samp == "Great Lakes")
+  sampP <- sum(samp == "Plains")
+  sampSW <- sum(samp == "Southwest")
+  sampRM <- sum(samp == "Rocky Mountain")
+  sampFW <- sum(samp == "Far West")
+  
+  actual.samp.values <- c(sampNE, sampME, sampSE, sampGL,
+                          sampP, sampSW, sampRM, sampFW)
+  
+  test.stat[i] <- sum(((actual.samp.values - expected.values)^2)/expected.values)
+}
+
+hist(test.stat)
+
+mean(test.stat >= actual.test.stat)
+```
+
+
 4) Conclusion: Explain how your research question was answered and what possible
 meaningful takeaway you/the reader should have.
 
