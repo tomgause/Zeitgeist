@@ -1,7 +1,7 @@
 ---
-title: "Report"
+title: "Does the Zeitgeist Speak for Us?"
 author: "Tom Gause and Liam O'Brien"
-date: '2022-05-22'
+date: 'May 22, 2022'
 output:
   pdf_document: default
   html_document: default
@@ -105,4 +105,4 @@ We wanted to know if the Zeitgeist survey was a random sample from the populatio
 
 
 # Acknowledgement  
-We would also like to thank The Director of Assessment and Institutional Research at Middlebury, Adela Langrock, who generously compiled Middlebury's geography data for us. Lastly, we would like to thank Professor Alex Lyford who taught us statistics and advised us on this report.  
+We would like to thank The Director of Assessment and Institutional Research at Middlebury, Adela Langrock, who generously compiled Middlebury's geography data for us. Lastly, we would like to thank Professor Alex Lyford who taught us statistics and advised us on this report.  

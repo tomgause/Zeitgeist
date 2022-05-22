@@ -603,3 +603,30 @@ print(paste0("Alpha-Star: ", alpha.star))
 print(paste0("P-Value: ", p.value.race))
 ```
 
+### L. Conclusion Charts, Major  
+``` {r phase2.analysis.major}
+library(ggplot2)
+n <- sum(Major.Data.Phase2$Zeitgeist)
+expected.prob.majors <- NULL
+expected.count.majors <- NULL
+
+# Calculate probability using loop bc no way I'm doing it by hand
+for (i in c(1:length(Major.Data.Phase2$Major))) {
+  expected.prob.majors[i] <- Major.Data.Phase2$Middlebury[i] / 
+    sum(Major.Data.Phase2$Middlebury)
+  expected.count.majors[i] <- expected.prob.majors[i] * n
+}
+
+
+all.plot.data <- data.frame(expected,
+                            observed = Major.Data.Phase2$Zeitgeist,
+                            major = Major.Data.Phase2$Major)[-26, ] %>%
+  mutate(diff = abs(observed - expected))
+ 
+# Grouped
+ggplot(plot.datadata, aes(fill=condition, y=value, x=specie)) + 
+       geom_bar(position="dodge", stat="identity")
+
+
+```
+
