@@ -150,8 +150,13 @@ sample really “random,” whatever that means in context?
 3) Results: Describe the results of your analyses, simulations, etc. and demonstrate graphs and other output that accompany/enhance these results.
 
 ```{r}
+# Set seed so we get the same result every time
+set.seed(31)
+
+# Number of times that we will simulate samples for our sampling distribution 
 N <- 100000
 
+# The population of graduation years provided by the administration
 Population <- c(rep("2022", 600), rep("2023", 690),
                 rep("2024", 727), rep("2025",638))
 
@@ -173,12 +178,14 @@ epop25 <- eprop25*samp.size
 
 expected.values <- c(epop22, epop23, epop24, epop25)
 
-# test statistic is the sum of (actual - expected)^2
+# test statistic is the sum of ((actual - expected)^2)/expected
 actual.test.stat <- sum(((Class.Data.Raw$Zeitgeist - expected.values)^2)/expected.values)
 
 test.stat <- NULL
 
+# Simulating our sampling distribution
 for(i in 1:N){
+  # Taking a sample from our population
   samp <- sample(Population, samp.size, replace = FALSE)
   
   samp22 <- sum(samp == "2022")
@@ -188,15 +195,19 @@ for(i in 1:N){
   
   actual.samp.values <- c(samp22,samp23,samp24,samp25)
   
+  # Storing the test statistic for each simulated sample
   test.stat[i] <- sum(((actual.samp.values - expected.values)^2)/expected.values)
 }
 
 hist(test.stat)
 
+# p-value: probability of finding something more extreme than actual.test.stat
 mean(test.stat >= actual.test.stat)
+```
+We observe a $p$-value of about 0.15317, meaning that we have about a 15% chance of observing something more extreme than the test statistic of our sample `actual.test.stat' given that the proportion of students in each class is randomly sampled from the Middlebury population.
 
-View(Geography.Data.Raw)
-
+```{r}
+# The population of regions as given by the administration data
 Population <- c(rep("New England", 698), rep("Mideast", 604),
                 rep("Southeast", 203), rep("Great Lakes",164),
                 rep("Plains", 70), rep("Southwest", 78),
@@ -229,11 +240,12 @@ epopFW <- epropFW*samp.size
 expected.values <- c(epopNE, epopME, epopSE, epopGL,
                      epopP, epopSW, epopRM, epopFW)
 
-#Don't want last two reponses
+#Don't want last two responses ("International" & "I prefer not to answer")
 actual.test.stat <- sum(((Geography.Data.Raw$Zeitgeist[1:8] - expected.values)^2)/expected.values)
 
 test.stat <- NULL
 
+# Simulating our sampling distribution
 for(i in 1:N){
   samp <- sample(Population, samp.size, replace = FALSE)
   
@@ -249,14 +261,16 @@ for(i in 1:N){
   actual.samp.values <- c(sampNE, sampME, sampSE, sampGL,
                           sampP, sampSW, sampRM, sampFW)
   
+  # Computing the test stat for our sample
   test.stat[i] <- sum(((actual.samp.values - expected.values)^2)/expected.values)
 }
 
 hist(test.stat)
 
+# p-value: the probability of observing something rarer than actual.test.stat
 mean(test.stat >= actual.test.stat)
 ```
-
+Here, we get a $p$-value of about 0.32251 meaning there is about a 32% chance of observing our sample's test statistic `actual.test.stat` given that Zeitgeist is randomly sampled from the administration's population data.
 
 4) Conclusion: Explain how your research question was answered and what possible
 meaningful takeaway you/the reader should have.
