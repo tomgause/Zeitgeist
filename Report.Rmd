@@ -22,11 +22,11 @@ Our null hypothesis is: The Zeitgeist is a random sample from the Middlebury stu
 # Methods    
 As we are testing our hypothesis with a large number of metrics, we pre-planned the following steps to avoid a type I error, i.e. avoid p-hacking. First, we decided to only run permutation tests. We used the formula $\alpha^* = 1-(1-\alpha)^{\frac{1}{k}}$ where $\alpha = 0.05$ and $k = 5$ to determine the value $<\alpha^* = \simeq 0.0102$ at which the p-value is considered statistically significant. Next, there is some variation in the features of the Zeitgeist and Middlebury Administration college data. To do analysis, we need to combine or remove some features from both dataset. To avoid bias, these data mutations were made before running our first phase of statistical tests. If the p-values from any of the Phase 1 metric tests came up significant, we would engage in a series of Phase 2 tests where we would alter the data assumptions made about the metrics before Phase 1 and re-test against the hypothesis. This process will help ensure any detected significance is not due to falsely made assumptions. 
 
-For each of our five categories (gender, graduation year, race, region of residence, and major), we perform a permutation test. In each, we treat the Zeitgeist data like a sample from the administration data, which represents the Middlebury population. Our null hypothesis $H_0$ is that the Zeitgeist data is a random sample from the administration data. We use the following test statistic for our Zeitgeist data.
+For each of our five categories (gender, graduation year, race, region of residence, and major), we perform a permutation test. In each, we treat the Zeitgeist data like a sample from the administration data, which represents the Middlebury population. Our null hypothesis $H_0$ is that the Zeitgeist data is a random sample from the administration data. We use mean absolute error (MAE) as our test statistic for our Zeitgeist data.
 \begin{equation*}
-\sum \frac{(\text{observed} - \text{expected})^2}{\text{expected}}.
+\text{MAE} = \frac{1}{n}\sum |\text{observed} - \text{expected}|.
 \end{equation*}
-We are summing over each categorical variable. The observed count is the number of students in a category, and the expected count is the number of students that would be in the category if the proportion of students in the Zeitgeist sample was equal to the proportion in the population at Middlebury—as provided by the administration data. 
+We are summing over each categorical variable, and $n$ is the number of categorical variables. The observed count is the number of students in a category, and the expected count is the number of students that would be in the category if the proportion of students in the Zeitgeist sample was equal to the proportion in the population at Middlebury---as provided by the administration data. 
 
 ### Data Collection
 The Zeitgeist data was collected from \href{https://www.middleburycampus.com/article/2022/05/zeitgeist-4-0-2022}{this article}. It is unknown what data modification/cleaning was done before publishing the article, so we treat this data as ground truth for Zeitgeist. As the Zeitgeist survey was done during the spring semester in 2022, we aimed to retrieve data from Middlebury during the spring of 2022 as well. The data from Middlebury’s administration was collected from  the \href{Undergraduate College | Middlebury}{\textit{Office of Assessment and Institutional Research}}. Their \textit{Spring 2022 Enrollment} document provided us information about the total enrollment at Middlebury by gender and by ethnicity. The Director of Assessment and Institutional Research at Middlebury, Adela Langrock, generously put together geographic data for us; it totals the states of residence for the enrolled students in the spring of 2022. We did not have the number of each graduating class enrolled in the spring of 2022; instead, we multiplied the proportion of each class in the fall of 2021 by the total enrollment for the spring of 2022. We are assuming that the proportions of each graduating class is the same in the fall and spring semesters. The enrollment by graduation year for the fall is contained in the \textit{Fall 2021 Student Profile} on the Office of Assessment and Institutional Research webpage linked above.
@@ -203,8 +203,8 @@ epop25 <- eprop25*samp.size
 
 expected.values <- c(epop22, epop23, epop24, epop25)
 
-# test statistic is the sum of ((actual - expected)^2)/expected
-actual.test.stat <- sum(((Class.Data.Raw$Zeitgeist - expected.values)^2)/expected.values)
+# test statistic is MAE
+actual.test.stat <- (1/4)*sum(abs(Class.Data.Raw$Zeitgeist - expected.values))
 
 test.stat <- NULL
 
@@ -221,7 +221,7 @@ for(i in 1:N){
   actual.samp.values <- c(samp22,samp23,samp24,samp25)
   
   # Storing the test statistic for each simulated sample
-  test.stat[i] <- sum(((actual.samp.values - expected.values)^2)/expected.values)
+  test.stat[i] <- (1/4)*sum(abs(actual.samp.values - expected.values))
 }
 
 hist(test.stat)
@@ -229,7 +229,7 @@ hist(test.stat)
 # p-value: probability of finding something more extreme than actual.test.stat
 mean(test.stat >= actual.test.stat)
 ```
-We observe a $p$-value of about 0.15317, meaning that we have about a 15% chance of observing something more extreme than the test statistic of our sample `actual.test.stat' given that the proportion of students in each class is randomly sampled from the Middlebury population.
+We observe a $p$-value of about 0.17437, meaning that we have about a 17% chance of observing something more extreme than the test statistic of our sample `actual.test.stat' given that the proportion of students in each class is randomly sampled from the Middlebury population. This is not rare enough to reject the null hypothesis because the $p$-value is larger than $\alpha^{*}$
 
 ```{r}
 # The population of regions as given by the administration data
@@ -250,7 +250,7 @@ epropSW <- 78/pop.size
 epropRM <- 77/pop.size
 epropFW <- 301/pop.size
 
-samp.size <- sum(Geography.Data.Raw$Zeitgeist)
+samp.size <- sum(Geography.Data.Raw$Zeitgeist[1:8])
 
 # Expected values in a sample our size
 epopNE <- epropNE*samp.size
@@ -266,7 +266,7 @@ expected.values <- c(epopNE, epopME, epopSE, epopGL,
                      epopP, epopSW, epopRM, epopFW)
 
 #Don't want last two responses ("International" & "I prefer not to answer")
-actual.test.stat <- sum(((Geography.Data.Raw$Zeitgeist[1:8] - expected.values)^2)/expected.values)
+actual.test.stat <- (1/8)*sum(abs(Geography.Data.Raw$Zeitgeist[1:8] - expected.values))
 
 test.stat <- NULL
 
@@ -287,7 +287,7 @@ for(i in 1:N){
                           sampP, sampSW, sampRM, sampFW)
   
   # Computing the test stat for our sample
-  test.stat[i] <- sum(((actual.samp.values - expected.values)^2)/expected.values)
+  test.stat[i] <- (1/8)*sum(abs(actual.samp.values - expected.values))
 }
 
 hist(test.stat)
@@ -295,7 +295,7 @@ hist(test.stat)
 # p-value: the probability of observing something rarer than actual.test.stat
 mean(test.stat >= actual.test.stat)
 ```
-Here, we get a $p$-value of about 0.32251 meaning there is about a 32% chance of observing our sample's test statistic `actual.test.stat` given that Zeitgeist is randomly sampled from the administration's population data.
+Here, we get a $p$-value of about 0.04467 meaning there is about a 4% chance of observing something more rare than our sample's test statistic `actual.test.stat` given that Zeitgeist is randomly sampled from the administration's population data. This is still larger than $\alpha^*$, so we do not have enough evidence to reject the null hypothesis.
 
 #Results
 
