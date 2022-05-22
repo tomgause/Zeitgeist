@@ -271,7 +271,6 @@ print(paste0("P-Value: ", p.value.geography))
 
 ### E. Phase 1 Permutation Test for Gender  
 ``` {r phase1.analysis.gender}
-# 1 is Cisgender Female, 0 is Cisgender Male
 n <- sum(Gender.Data.Phase1$Zeitgeist)
 
 # Expected number of cisgender females in Zeitgeist sample
@@ -463,9 +462,6 @@ Major.Data.Phase2 <- Major.Data.Phase1[-47,]
 ``` {r phase2.analysis.gender}
 # 1 is Cisgender Female, 0 is Cisgender Male
 n <- sum(Gender.Data.Phase2$Zeitgeist)
-k <- nrow(Gender.Data.Phase2)
-alpha <- 0.05
-alpha.star <- 1 - (1-alpha)^(1/k)
 
 # Expected number of cisgender females in Zeitgeist sample
 expected.prob.f <- (Gender.Data.Phase2$Middlebury[1] /
@@ -603,9 +599,106 @@ print(paste0("Alpha-Star: ", alpha.star))
 print(paste0("P-Value: ", p.value.race))
 ```
 
-### L. Conclusion Charts, Major  
-``` {r phase2.analysis.major}
+### L. Conclusion Charts  
+``` {r charts}
 library(ggplot2)
+
+###############################################################################
+# Gender Plots
+# 1 is Cisgender Female, 0 is Cisgender Male
+n <- sum(Gender.Data.Phase2$Zeitgeist)
+
+# Expected number of cisgender females in Zeitgeist sample
+expected.prob.f <- (Gender.Data.Phase2$Middlebury[1] /
+                    sum(Gender.Data.Phase2$Middlebury))
+expected.count.f <- expected.prob.f * n
+# Expected number of cisgender males in Zeitgeist sample
+expected.prob.m <- (Gender.Data.Phase2$Middlebury[2] /
+                    sum(Gender.Data.Phase2$Middlebury))
+expected.count.m <- expected.prob.m * n
+
+expected.count.genders <- c(expected.count.f,
+                          expected.count.m)
+observed.count.genders <- Gender.Data.Phase2$Zeitgeist
+gender.plot.data1 <- data.frame(gender = c("CGF", "CGM", "CGF", "CGM"),
+                                count = c(observed.count.genders, expected.count.genders),
+                                source = c(rep("Zeitgeist", 2), rep("Expected", 2)))
+gender.plot.data2 <- data.frame(gender = c("CGF", "CGM"),
+                                diff = observed.count.genders - expected.count.genders)
+
+ggplot(gender.plot.data1, aes(fill=source, y=count, x=gender)) + 
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ggplot(gender.plot.data2, aes(fill = gender, x = gender, y = diff)) +
+  geom_col(position = "identity") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+###############################################################################
+# Race plots
+
+# Total Zeitgeist Responses
+n <- sum(Race.Data.Phase2$Zeitgeist)
+
+# Expected number of White in Zeitgeist sample
+expected.prob.w <- Race.Data.Phase2$Middlebury[1] /
+                   sum(Race.Data.Phase2$Middlebury)
+expected.count.w <- expected.prob.w * sum(Race.Data.Phase2$Zeitgeist)
+
+# Expected number of Asian in Zeitgeist sample
+expected.prob.a <- Race.Data.Phase2$Middlebury[2] /
+                   sum(Race.Data.Phase2$Middlebury)
+expected.count.a <- expected.prob.a * sum(Race.Data.Phase2$Zeitgeist)
+
+# Expected number of Hispanic or Latino Origin
+expected.prob.h <- Race.Data.Phase2$Middlebury[3] /
+                   sum(Race.Data.Phase2$Middlebury)
+expected.count.h <- expected.prob.h * sum(Race.Data.Phase2$Zeitgeist)
+
+# Expected number of Black or African American
+expected.prob.b <- Race.Data.Phase2$Middlebury[4] /
+                   sum(Race.Data.Phase2$Middlebury)
+expected.count.b <- expected.prob.b * sum(Race.Data.Phase2$Zeitgeist)
+
+# Expected number of American Indian or Alaskan Native
+expected.prob.i <- Race.Data.Phase2$Middlebury[5] /
+                   sum(Race.Data.Phase2$Middlebury)
+expected.count.i <- expected.prob.i * sum(Race.Data.Phase2$Zeitgeist)
+
+expected.count.races <- c(expected.count.w,
+                          expected.count.a,
+                          expected.count.h,
+                          expected.count.b,
+                          expected.count.i)
+observed.count.races <- Race.Data.Phase2$Zeitgeist
+race.plot.data1 <- data.frame(race = Race.Data.Phase2$Race,
+                              count = c(observed.count.races, expected.count.races),
+                              source = c(rep("Zeitgeist", 5), rep("Expected", 5)))
+race.plot.data2 <- data.frame(race = Race.Data.Phase2$Race,
+                             diff = observed.count.races - expected.count.races)
+
+race.plot.data1$race[3] <- "H or L"
+race.plot.data1$race[4] <- "Black"
+race.plot.data1$race[5] <- "AI or AN"
+race.plot.data1$race[8] <- "H or L"
+race.plot.data1$race[9] <- "Black"
+race.plot.data1$race[10] <- "AI or AN"
+
+race.plot.data2$race[3] <- "H or L"
+race.plot.data2$race[4] <- "Black"
+race.plot.data2$race[5] <- "AI or AN"
+
+ggplot(race.plot.data1, aes(fill=source, y=count, x=race)) + 
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ggplot(race.plot.data2, aes(fill = race, x = race, y = diff)) +
+  geom_col(position = "identity") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+
+
+###############################################################################
+# Major plots
 n <- sum(Major.Data.Phase2$Zeitgeist)
 expected.prob.majors <- NULL
 expected.count.majors <- NULL
@@ -618,14 +711,33 @@ for (i in c(1:length(Major.Data.Phase2$Major))) {
 }
 
 
-all.plot.data <- data.frame(expected,
+all.plot.data <- data.frame(expected = expected.count.majors,
                             observed = Major.Data.Phase2$Zeitgeist,
                             major = Major.Data.Phase2$Major)[-26, ] %>%
-  mutate(diff = abs(observed - expected))
- 
-# Grouped
-ggplot(plot.datadata, aes(fill=condition, y=value, x=specie)) + 
-       geom_bar(position="dodge", stat="identity")
+  mutate(diff = observed - expected)
+plot.data.reduced <- all.plot.data[order(abs(all.plot.data$diff),
+                                   decreasing = TRUE),][c(1:10),]
+plot1.data <- data.frame(count = c(
+                                   plot.data.reduced$observed,
+                                   plot.data.reduced$expected),
+                        source = c(
+                                   rep("Zeigeist", length(plot.data.reduced$observed)),
+                                   rep("Expected", length(plot.data.reduced$expected))),
+                        major = c(rep(plot.data.reduced, 2))) %>%
+  select(count, source, major.major, major.diff.1)
+colnames(plot1.data)[c(3,4)] <- c("major", "diff")
+plot2.data <- plot.data.reduced %>%
+  select(major, diff)
+
+plot1.data$major[9] <- "MBB"
+plot1.data$major[19] <- "MBB"
+plot2.data$major[9] <- "MBB"
+ggplot(plot1.data, aes(fill=source, y=count, x=major)) + 
+  geom_bar(position="dodge", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ggplot(plot2.data, aes(fill = major, x = major, y = diff)) +
+  geom_col(position = "identity") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 
 ```

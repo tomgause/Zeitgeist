@@ -1,15 +1,15 @@
 ---
 title: "Does the Zeitgeist Speak for Us?"
 author: "Tom Gause and Liam O'Brien"
-date: 'May 22, 2022'
-output:
-  pdf_document: default
-  html_document: default
+date: "May 22, 2022"
+output: pdf_document
+header-includes:
+- \usepackage{listings}
+- \usepackage{amsmath, amsthm, amssymb, amsfonts}
+- \usepackage{graphicx, float}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 # Introduction    
 For the past four years at Middlebury College, a small team of students who write for the Middlebury Campus, the school's student newspaper, have designed a survey called the Zeitgeist. The intent of this survey is to get a snapshot of student behavior and attitude on campus. The survey is totally anonymous, and this lets the Zeitgeist team ask a range of sensitive questions such as "Have you ever broken the Honor Code?", "Have you been a victim of sexual assault?", and "Are you happy"? Each year, this survey, which takes 10-20 minutes to complete, is sent to the entire student body. When the responses are collected, the Middlebury Campus analyzes the data and releases an article summarizing some of the significant results of the survey (note that this article shares raw statistics only. The Zeitgeist team avoids any opinion writing and performs minimal statistical analysis). The Zeitgeist project is the largest and most comprehensive student census at Middlebury.   
@@ -19,15 +19,15 @@ In Spring 2022, the Zeitgeist team released the Zeitgeist 4.0. They collected 11
 Our null hypothesis is: The Zeitgeist is a random sample from the Middlebury student population. To evaluate this hypothesis, we used 5 metrics---Class (class year), Geographic Distribution (hometown), Gender (gender identification), Race (ethnicity), and Major (academic)---and collected data for each of these metrics from the Zeitgeist summary post referenced above. For our Middlebury College population data, we collected responses from various administrators and public datasets.   
 
 # Methods    
-As we are testing our hypothesis with a large number of metrics, we pre-planned the following steps to avoid a type I error, i.e. avoid p-hacking. First, we decided to only run permutation tests. We used the formula $\alpha^* = 1-(1-\alpha)^{\frac{1}{k}}$ where $\alpha = 0.05$ and $k = 5$ to determine the value $\alpha^* \simeq 0.0102$ at which the p-value is considered statistically significant for each test. Next, there is some variation in the features of the Zeitgeist and Middlebury Administration college data. To do analysis, we need to combine or remove some features from both dataset. To avoid bias, these data mutations were made before running our first phase of statistical tests. If the p-values from any of the Phase 1 metric tests came up significant, we would engage in a series of Phase 2 tests where we would alter the data assumptions made about the metrics before Phase 1 and re-test against the hypothesis. This process will help ensure any detected significance is not due to falsely made assumptions.  
+As we are testing our hypothesis with a large number of metrics, we pre-planned the following steps to avoid a type I error, i.e. avoid p-hacking. First, we decided to only run permutation tests. We used the formula $\alpha^* = 1-(1-\alpha)^{\frac{1}{k}}$ where $\alpha = 0.05$ and $k = 5$ to determine the value $\alpha^* \simeq 0.0102$ at which the p-value is considered statistically significant for each test. Next, there is some variation in the features of the Zeitgeist and Middlebury Administration college data. To do analysis, we need to combine or remove some features from both datasets. To avoid bias, these data mutations were made before running our first phase of statistical tests. If the p-values from any of our initial tests (Phase 1) are significant, we will change the assumptions we make about the data and perform the permutation tests again in \textit{Phase 2} testing. This process will help ensure any detected significance is not due to falsely made assumptions.
 
-For each of our five categories (geographic location, graduation year, gender, race, and major), we perform a permutation test. In each, we treat the Zeitgeist data like a sample from the administration data, which represents the Middlebury population. Our null hypothesis $H_0$ is that the Zeitgeist respondents are a random sample from the Middlebury student population. We use mean absolute error (MAE) as our test statistic for our Zeitgeist data.  
+For each of our five categories (geographic location, graduation year, gender, race, and major), we perform a permutation test. In each, we treat the Zeitgeist data like a sample from the administration data, which represents the Middlebury population. Our null hypothesis $H_0$ is that the Zeitgeist respondents are a random sample from the Middlebury student population. We use mean absolute error (MAE)  over all categorical variables as our test statistic for our Zeitgeist data.  
  
 \begin{equation*}
 \text{MAE} = \frac{1}{n}\sum |\text{observed} - \text{expected}|.
 \end{equation*}  
 We are summing over each categorical variable, and $n$ is the number of categorical variables.
-The observed count is the number of students in a category, and the expected count is the number of students that would be in the category if the proportion of students in the Zeitgeist sample was equal to the proportion in the population at Middlebury---as provided by the administrative data.  
+The observed count is the number of students in a category, and the expected count is the number of students that would be in the category if the proportion of students in the Zeitgeist sample was equal to the proportion in the population at Middlebury---as provided by the administrative data. We chose to use MAE because---although it doesn’t penalize large differences as well as mean square error (MSE) or other similar test statistics---it is more holistic in that single categories can’t skew our test statistics as much. Moreover, as we’re working with large quantities, MSE would cause significant bias.
   
 ### Data Collection  
 The Zeitgeist data was collected from \href{https://www.middleburycampus.com/article/2022/05/zeitgeist-4-0-2022}{this article}. It is unknown what data modification/cleaning was done before publishing the article, so we treat this data as ground truth for Zeitgeist. As the Zeitgeist survey was done during the Spring semester in 2022, we retrieved Middlebury administrative metrics collected in the same period. The data from Middlebury’s administration was collected from the \href{Undergraduate College | Middlebury}{\textit{Office of Assessment and Institutional Research}}. Their \textit{Spring 2022 Enrollment} document provided us information about the total enrollment at Middlebury by gender and by ethnicity. The Director of Assessment and Institutional Research at Middlebury, Adela Langrock, generously put together geographic data for us; it totals the states of residence for the enrolled students in Spring 2022. We did not have the number of students in each graduating class enrolled in Spring 2022; instead, we multiplied the proportion of each class in Fall 2021 by the total enrollment for Spring 2022. We are assuming that the proportions of each graduating class are the same in the fall and spring semesters. The enrollment by graduation year for the Fall is contained in the \textit{Fall 2021 Student Profile} on the Office of Assessment and Institutional Research webpage linked above.  
@@ -62,47 +62,85 @@ At Middlebury, students often don't declare their major until the end of their s
   
 # Results  
 ### Phase 1
-See the Appendix for the `R` code.
+See the Appendix for the `R` code. Recall that both the Zeitgeist and Admin data are from spring 2022, so they are comparable.
 
-##### Class
-\textbf{P-value: 0.17437}
+##### Class P-value: 0.17437 \
 When looking at our class category, we observe a p-value of about 0.17437, meaning that we have about a 17% chance of observing something more extreme than the test statistic of our sample given that the proportion of students in each class is randomly sampled from the Middlebury population. This is not rare enough to reject the null hypothesis because the p-value is larger than $\alpha^*$
 
-##### Geography
-\textbf{P-value: 0.04467}
-For our geography category, we get a p-value of about 0.04467 meaning there is about a 4% chance of observing something more rare than our sample's test statistic given that Zeitgeist is randomly sampled from the administration's population data. This is still larger than $\alpha^*$, so we do not have enough evidence to reject the null hypothesis.
+##### Geography P-value: 0.04387 \
+For our geography category, we get a p-value of about 0.04467 meaning there is about a 4% chance of observing something more rare than our sample's test statistic given that Zeitgeist is randomly sampled from the administration's population data. Despite our p-value being smaller than $\alpha = 0.05$, it is still larger than $\alpha^*$, so we do not have enough evidence to reject the null hypothesis.  
 
 
-##### Gender
-\textbf{P-value: 0}
-Here, we got a p-value of 0. In our 100,000 simulations of random samples from Middlebury’s data, we did not find a sample with an MAE as extreme as the Zeitgeist data. Therefore, it is extremely unlikely that the Zeitgeist data was a random sample from Middlebury’s population. Zero is less than $\alpha^*$, so we will reject our null hypothesis that the Zeitgeist data was randomly sampled from Middlebury’s data.
+##### Gender P-value: 0 \
+Here, we got a p-value of 0. In our 100,000 simulations of random samples from Middlebury’s data, we did not find a sample with an MAE as extreme as the Zeitgeist data. Therefore, it is extremely unlikely that the Zeitgeist data was a random sample from Middlebury’s population. Zero is less than $\alpha^*$, so we will reject our null hypothesis that the Zeitgeist data was randomly sampled from Middlebury’s data.  
 
-##### Race
-\textbf{P-value: 1e-05}
-Again, we got a p-value of nearly zero when testing the race data, so it is extremely unlikely that the Zeitgeist data was a random sample of the population. Since the p-value is less than $\alpha^*$, we have enough evidence to reject the null hypothesis.
+##### Race P-value: 4e-05 \
+Again, we got a p-value of nearly zero when testing the race data, so it is extremely unlikely that the Zeitgeist data was a random sample of the population. Since the p-value is less than $\alpha^*$, we have enough evidence to reject the null hypothesis.  
   
-##### Major
-\textbf{P-value: 0}
-When testing the major data, we also got a p-value of zero. By the same logic as before, we reject our null hypothesis.
+##### Major P-value: 0 \
+When testing the major data, we also got a p-value of zero. By the same logic as before, we reject our null hypothesis.  
   
 ### Phase 2  
-After adjusting our assumptions, we got the following results. Since neither the class nor geography tests yielded statistically significant results, we will not test them again. We will, however, retest the other three categories after changing our assumptions.
+After adjusting our assumptions, we got the following results. Since neither the class nor geography tests yielded statistically significant results, we will not test them again. We will, however, retest the other three categories after changing our assumptions.  
 
-##### Gender
-\textbf{P-value: 1e-05}
-After changing our gender assumptions, we still got a p-value near zero. Now we can be confident that our significant result from Phase 1 was not due to the assumptions we made. This result gives us more evidence that the Zeitgeist is not a random sample from the Middlebury population.
+##### Gender P-value: 0 \
+After changing our gender assumptions, we still got a p-value near zero. Now we can be confident that our significant result from Phase 1 was not due to the assumptions we made. This result gives us more evidence that the Zeitgeist is not a random sample from the Middlebury population.  
 
-##### Race  
-\textbf{P-value: 4e-05}
-Again, changing our assumptions still yielded a near zero p-value, showing that our significant result in Phase 1 was not due to our assumptions.
+##### Race P-value: 5e-05 \
+Again, changing our assumptions still yielded a near zero p-value, showing that our significant result in Phase 1 was not due to our assumptions.  
 
-##### Major  
-\textbf{P-value: 0}
-Lastly, we changed our assumptions about the major data and still received a near zero p-value. Therefore, we still reject our null hypothesis that the Zeitgeist was a random sample from the Middlebury population.
+##### Major P-value: 0 \
+Lastly, we changed our assumptions about the major data and still received a near zero p-value. Therefore, we still reject our null hypothesis that the Zeitgeist was a random sample from the Middlebury population.  
+
+We further looked into which variables were making our Zeitgeist data so different from the Admin Data in Phase 2. When considering the following results, recall the assumptions described in our methods section.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 6in]{./plots/gender_compare.png}
+    \label{fig:my_label}
+\end{figure}  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 5in]{./plots/gender_diff.png}
+    \label{fig:my_label}
+\end{figure}  
+
+We can see that more Cisgender Females and fewer Cisgender Males took the survey than we would expect from a random sample of the Middlebury population.  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 6in]{./plots/race_compare.png}
+    \label{fig:my_label}
+\end{figure}  
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 5in]{./plots/race_diff.png}
+    \label{fig:my_label}
+\end{figure}  
+
+Fewer Hispanic or Latino and more Asian people took the survey than we would expect for a random sample.  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 6in]{./plots/major_compare.png}
+    \label{fig:my_label}
+\end{figure}  
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 5in]{./plots/major_diff.png}
+    \label{fig:my_label}
+\end{figure}  
+
+Lastly, we can see that far fewer economics majors, more environmental studies majors, and fewer neuroscience majors took the survey than we would expect in a random sample. From our limited data, we can’t say anything more about why we are seeing these differences.  
+
 
 # Conclusion  
-We wanted to know if the Zeitgeist survey was a random sample from the population of Middlebury students. After looking at the demographic of students who took the survey by class year, gender identity, race/ethnicity, geographic distribution (hometown), and academic major, we found evidence that the Zeitgeist was not a random sample. For each we simulated 100,000 random samples from Middlebury’s population and found that the Zeitgeist sample had exceptionally rare distributions by gender, race, and major. This is not surprising because we could imagine that people from certain groups on campus are more likely to take the Zeitgeist survey. It does, however, mean that we should be careful when reading the statistics from Zeitgeist—they may not reveal anything about the Middlebury population as a whole.
-
+We wanted to know if the Zeitgeist 4.0 survey was a random sample from the population of Middlebury College undergraduates. After looking at the demographic of students who took the survey by class year, gender identity, race/ethnicity, geographic distribution (hometown), and academic major, we found evidence that the Zeitgeist was not a random sample. For each we simulated 100,000 random samples from Middlebury’s population and found that the Zeitgeist sample had exceptionally rare distributions by gender, race, and major. Therefore, it is extremely unlikely that the Zeitgeist 4.0 respondents represent the Middlebury College undergraduate population, and the statistics in the Middlebury Campus's article are not an accurate picture of said population.
+  
 
 # Acknowledgement  
 We would like to thank The Director of Assessment and Institutional Research at Middlebury, Adela Langrock, who generously compiled Middlebury's geography data for us. Lastly, we would like to thank Professor Alex Lyford who taught us statistics and advised us on this report.  
+
+
+
