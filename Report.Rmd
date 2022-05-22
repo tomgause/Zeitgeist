@@ -61,13 +61,13 @@ For phase 1 testing, we made some big assumptions about how we should test our d
 At Middlebury, students often don't declare their major until the end of their second year---even after they know what they want to study. In phase 2 we will assume that some students marked down their intended major in the Zeitgeist survey even though they were still "undeclared" according to Middlebury's records. To account for this, we will remove the "undeclared" category from both data sets---making the assumption that people who gave their intended major on the Zeitgeist survey, while being undeclared, are not distributed in any special way. That is, they follow the distributions of majors already present in both the Middlebury and Zeitgeist data.
 
   
-``` {r phase1.data}
+ ``` {r phase1.data}
 library(tidyverse)
 library(dplyr)
 Gender.Data.Phase1 <- Gender.Data.Raw %>%
   select(Cisgender Female, Cisgender Male)
 
-```  
+``` 
 
 
 #Results
@@ -81,6 +81,6 @@ For our geography category, we get a $p$-value of about 0.04467 meaning there is
 4) Conclusion: Explain how your research question was answered and what possible
 meaningful takeaway you/the reader should have.
 
-Thank Yous:
+#Acknowledgement
 
-Consult for ethical data modification Sophie Hochman, Joint GSFS Sociology Major.
+Thank you to Sophie Hochman, Joint GSFS Sociology Major, whom we consulted for ethical data modification. We would also like to thank The Director of Assessment and Institutional Research at Middlebury, Adela Langrock, generously compiled Middlebury's geography data for us. Lastly, we would like to thank Professor Alex Lyford who taught us statistics and advised us on this report.
