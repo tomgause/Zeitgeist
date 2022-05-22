@@ -70,8 +70,11 @@ Gender.Data.Phase1 <- Gender.Data.Raw %>%
 
 
 #Results
-When looking at our class category, we observe a $p$-value of about 0.17437, meaning that we have about a 17% chance of observing something more extreme than the test statistic of our sample given that the proportion of students in each class is randomly sampled from the Middlebury population. See \textbf{Exhibit B} in the appendix for the `R` code. This is not rare enough to reject the null hypothesis because the $p$-value is larger than $\alpha^{*}$
 
+###Class
+When looking at our class category, we observe a $p$-value of about 0.17437, meaning that we have about a 17% chance of observing something more extreme than the test statistic of our sample given that the proportion of students in each class is randomly sampled from the Middlebury population. See \textbf{Exhibit B} in the appendix for the `R` code. This is not rare enough to reject the null hypothesis because the $p$-value is larger than $\alpha^*$
+
+###Geography
 For our geography category, we get a $p$-value of about 0.04467 meaning there is about a 4% chance of observing something more rare than our sample's test statistic given that Zeitgeist is randomly sampled from the administration's population data (\textbf{Exhibit C}). This is still larger than $\alpha^*$, so we do not have enough evidence to reject the null hypothesis.
 
 4) Conclusion: Explain how your research question was answered and what possible
