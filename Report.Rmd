@@ -44,7 +44,49 @@ For the Race section of the Zeitgeist, students were given eight options from wh
 
 #####Geographic Location
 We did not receive the number of international students enrolled during the spring of 2022; therefore, we are excluding international students from our statistical analysis.
- 
+
+
+###Phase 2 Testing
+If we see any significant differences, we want to change our assumptions and run the test again to ensure that we are not making any false claims based on false assumptions. In this section, I will outline our changes in assumptions for phase 2. Note that this section was written prior to doing any statistical tests on our data.
+
+Like before, our Class Year, Geographic Location, and Academic Major metrics matched one-to-one after removing the “I prefer not to answer” category, so we were not making any significant assumptions and will not run phase 2 testing for these categories.
+
+#####Gender
+We know that Zeitgeist surveyed respondents with six multiple-choice options for gender identification. Middlebury, however, only had two options two fill in: “Female” and “Male”. For our phase 1 testing, we just ignored the Zeitgeist responses that were neither “Female” nor “Male”. In phase 2 testing, we will make the assumption that people in other gender categories were forced to respond either “Female” or “Male”. We will assume that such a respondent’s choice of “Female” or “Male” was random with probability 0.5 of choosing either category. Our reasoning is that when non-binary people apply to Middlebury and have to select one of two categories which don't apply to them, they will pick randomly. After randomly re-assigning gender non-binary people, we will run our statistical test again.
+
+#####Race
+For phase 1 testing, we made some big assumptions about how we should test our data (see data modification above). For phase 2, we want to try a different approach. We will assume that those in administration’s data who selected “Two or more races” would have selected exactly two races if they were given the Zeitgeist survey. We will randomly assign each "Two or more races" selection in the administration data to two of the race categories with according to the distribution at Middlebury given by the admin data (excluding the two or more races category). Here we are adjusting our assumptions about the population rather than the Zeitgeist sample. After our changes we will run the test again with our new data.
+
+#####Major
+At Middlebury, students often don't declare their major until the end of their second year---even after they know what they want to study. In phase 2 we will assume that some students marked down their intended major in the Zeitgeist survey even though they were still "undeclared" according to Middlebury's records. To account for this, we will remove the "undeclared" category from both data sets---making the assumption that people who gave their intended major on the Zeitgeist survey, while being undeclared, are not distributed in any special way. That is, they follow the distributions of majors already present in both the Middlebury and Zeitgeist data.
+  
+``` {r phase1.data}
+library(tidyverse)
+library(dplyr)
+Gender.Data.Phase1 <- Gender.Data.Raw %>%
+  select(Cisgender Female, Cisgender Male)
+
+```  
+
+
+#Results
+When looking at our class category, we observe a $p$-value of about 0.17437, meaning that we have about a 17% chance of observing something more extreme than the test statistic of our sample given that the proportion of students in each class is randomly sampled from the Middlebury population. See \textbf{Exhibit B} in the appendix for the `R` code. This is not rare enough to reject the null hypothesis because the $p$-value is larger than $\alpha^{*}$
+
+For our geography category, we get a $p$-value of about 0.04467 meaning there is about a 4% chance of observing something more rare than our sample's test statistic given that Zeitgeist is randomly sampled from the administration's population data (\textbf{Exhibit C}). This is still larger than $\alpha^*$, so we do not have enough evidence to reject the null hypothesis.
+
+4) Conclusion: Explain how your research question was answered and what possible
+meaningful takeaway you/the reader should have.
+
+Thank Yous:
+
+Consult for ethical data modification Sophie Hochman, Joint GSFS Sociology Major.
+
+
+#Appendix
+In the appendix is the `R` code we used for our data modifications and statistical tests.
+
+###Exhibit A
+#####Data Modification for Phase 1
 ``` {r raw.data}
 Gender <- c("Cisgender Female", "Cisgender Male", "Non-Binary", 
             "I prefer not to answer", "Transgender Male", "Transgender Female",
@@ -145,38 +187,8 @@ Major.Data.Raw <- merge(Major.Data.M, Major.Data.Z, all = TRUE)
 ```  
 
 
-###Phase 2 Testing
-If we see any significant differences, we want to change our assumptions and run the test again to ensure that we are not making any false claims based on false assumptions. In this section, I will outline our changes in assumptions for phase 2. Note that this section was written prior to doing any statistical tests on our data.
-
-Like before, our Class Year, Geographic Location, and Academic Major metrics matched one-to-one after removing the “I prefer not to answer” category, so we were not making any significant assumptions and will not run phase 2 testing for these categories.
-
-#####Gender
-We know that Zeitgeist surveyed respondents with six multiple-choice options for gender identification. Middlebury, however, only had two options two fill in: “Female” and “Male”. For our phase 1 testing, we just ignored the Zeitgeist responses that were neither “Female” nor “Male”. In phase 2 testing, we will make the assumption that people in other gender categories were forced to respond either “Female” or “Male”. We will assume that such a respondent’s choice of “Female” or “Male” was random with probability 0.5 of choosing either category. Our reasoning is that when non-binary people apply to Middlebury and have to select one of two categories which don't apply to them, they will pick randomly. After randomly re-assigning gender non-binary people, we will run our statistical test again.
-
-#####Race
-For phase 1 testing, we made some big assumptions about how we should test our data (see data modification above). For phase 2, we want to try a different approach. We will assume that those in administration’s data who selected “Two or more races” would have selected exactly two races if they were given the Zeitgeist survey. We will randomly assign each "Two or more races" selection in the administration data to two of the race categories with according to the distribution at Middlebury given by the admin data (excluding the two or more races category). Here we are adjusting our assumptions about the population rather than the Zeitgeist sample. After our changes we will run the test again with our new data.
-
-#####Major
-At Middlebury, students often don't declare their major until the end of their second year---even after they know what they want to study. In phase 2 we will assume that some students marked down their intended major in the Zeitgeist survey even though they were still "undeclared" according to Middlebury's records. To account for this, we will remove the "undeclared" category from both data sets---making the assumption that people who gave their intended major on the Zeitgeist survey, while being undeclared, are not distributed in any special way. That is, they follow the distributions of majors already present in both the Middlebury and Zeitgeist data.
-  
-``` {r phase1.data}
-library(tidyverse)
-library(dplyr)
-Gender.Data.Phase1 <- Gender.Data.Raw %>%
-  select(Cisgender Female, Cisgender Male)
-
-```  
-
-
-
-2) Methods: Describe the methodology you used (i.e., the types of statistical tech-
-niques) to answer your research questions. You should describe the data in greater
-detail in this section. Any descriptions of estimators to be used, calculations of
-bias, details about simulations, etc. belong here. You can also use this section
-to be critical of your own sampling scheme. Did things go as planned? Was your
-sample really “random,” whatever that means in context?
-3) Results: Describe the results of your analyses, simulations, etc. and demonstrate graphs and other output that accompany/enhance these results.
-
+###Exhibit B
+#####Permutation Test for Class Category
 ```{r}
 # Set seed so we get the same result every time
 set.seed(31)
@@ -232,8 +244,9 @@ hist(test.stat)
 # p-value: probability of finding something more extreme than actual.test.stat
 mean(test.stat >= actual.test.stat)
 ```
-We observe a $p$-value of about 0.17437, meaning that we have about a 17% chance of observing something more extreme than the test statistic of our sample `actual.test.stat' given that the proportion of students in each class is randomly sampled from the Middlebury population. This is not rare enough to reject the null hypothesis because the $p$-value is larger than $\alpha^{*}$
 
+###Exhibit C
+#####Permutation Test for Geography Category
 ```{r}
 # The population of regions as given by the administration data
 Population <- c(rep("New England", 698), rep("Mideast", 604),
@@ -298,16 +311,3 @@ hist(test.stat)
 # p-value: the probability of observing something rarer than actual.test.stat
 mean(test.stat >= actual.test.stat)
 ```
-Here, we get a $p$-value of about 0.04467 meaning there is about a 4% chance of observing something more rare than our sample's test statistic `actual.test.stat` given that Zeitgeist is randomly sampled from the administration's population data. This is still larger than $\alpha^*$, so we do not have enough evidence to reject the null hypothesis.
-
-#Results
-
-
-4) Conclusion: Explain how your research question was answered and what possible
-meaningful takeaway you/the reader should have.
-
-Thank Yous:
-
-Consult for ethical data modification Sophie Hochman, Joint GSFS Sociology Major.
-
-
