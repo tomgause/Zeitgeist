@@ -1,0 +1,240 @@
+---
+title: "ReportAppendix"
+author: "Tom Gause and Liam O'Brien"
+date: '2022-05-22'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Appendix
+In the appendix is the `R` code we used for our data modifications and statistical tests.
+
+###Exhibit A
+#####Data Modification for Phase 1
+``` {r raw.data}
+Gender <- c("Cisgender Female", "Cisgender Male", "Non-Binary", 
+            "I prefer not to answer", "Transgender Male", "Transgender Female",
+            "These options don't define me")
+vals.Z <- c(652, 401, 63, 10, 13, 5, 21)
+# The data from Middlebury only has binary options for "Women" and "Men"
+vals.M <- c(1416, 1240, 0, 0, 0, 0, 0)
+Gender.Data.Raw <- data.frame(Gender = Gender,
+                          Zeitgeist = vals.Z,
+                          Middlebury = vals.M)
+
+FinAid <- c("Yes", "No")
+vals.Z <- c(485, 639)
+# Middlebury data is from Fall 2021, not Spring 2022.
+vals.M <- c(1315, 1520)
+
+# Extra row ommitted, 4 "prefer not to answer"
+Class.Z <- c(2022, 2022.5, 2023, 2023.5, 2024, 2024.5, 2025, 2025.5, 0)
+vals.Z <- c(180, 80, 190, 79, 242, 73, 236, 50, 4)
+Class.M <- c(2022,2023,2024,2025)
+# Rounded data based on proportions from fall 2021
+vals.M <- c(600,690,727,638)
+Class.Data.Z <- data.frame(Class = Class.Z,
+                         Zeitgeist = vals.Z)
+
+# We assume that the administration combined feb and reg classes
+vals.Z2 <- c(180+80, 190+79, 242+73, 236+50)
+
+Class.Data.Raw <- data.frame(Class = Class.M,
+                             Zeitgeist = vals.Z2,
+                             Middlebury = vals.M)
+
+# This data is tricky, because students had the option to check
+# all boxes that applied
+Race <- c("White", "Asian", "Hispanic or Latino Origin", 
+          "Black or African American", "Middle Eastern or North African", 
+          "I prefer not to answer", "American Indian or Alaskan Native",
+          "Native Hawaiian or other Pacific Islander", "International", 
+          "Two or more races", "Race and/or ethnicity unknown")
+vals.Z <- c(911, 173, 96, 57, 17, 13, 8, 5, 0, 0, 0)
+# "Middle Eastern or North African" and "I prefer not to answer" are not 
+# categories in Middlebury's data
+# "International", "Two or more races", and "Race and/or ethnicity unknown" 
+# are additional categories in Middlebury data
+
+vals.M <- c(1556, 199, 287, 125, 0, 0, 3, 0, 308, 157, 19)
+Race.Data.Raw <- data.frame(Race = Race,
+                        Zeitgeist = vals.Z,
+                        Middlebury = vals.M)
+
+Geography <- c("New England", "Mideast", "Southeast", "Great Lakes", "Plains", 
+               "Southwest", "Rocky Mountain", "Far West", 
+               "Inernational/Outside the U.S.", "I prefer not to answer")
+vals.Z <- c(340, 272, 101, 63, 43, 33, 39, 136, 103, 4)
+vals.M <- c(698, 604, 203, 164, 70, 78, 77, 301, 0, 143)
+Geography.Data.Raw <- data.frame(Geographic.Location = Geography,
+                             Zeitgeist = vals.Z,
+                             Middlebury = vals.M)
+
+
+
+
+Majors.Z <- c("Undeclared", "Environmental Studies", "Economics", "Political Science", "Neuroscience", "Computer Science", "English & American Literatures", "Psychology", "International & Global Studies", "Molecular Biology & Biochemistry", "Biology", "Mathematics", "International Politics & Economics", "History", "History of Art & Architecture", "Film & Media Culture", "Geography", "Anthropology", "Physics", "Spanish", "Chemistry", "Sociology", "Theatre", "Education Studies", "Music", "Philosophy", "Chinese", "Geology", "Biochemistry", "Independent Scholar", "Studio Art", "I prefer not to answer", "Arabic", "Gender, Sexuality, & Feminist Studies", "German", "Classics", "Japanese Studies", "Dance", "Russian", "French", "Religion", "American Studies", "Comparative Literature", "Literary Studies", "Black Studies", "History-Science, Medicine, and Technology", "Italian")
+
+vals.Z <- c(162, 125, 113, 70, 68, 88, 60, 58, 50, 38, 35, 48, 44, 35, 33, 30, 25, 24, 25, 23, 22, 24, 17, 17, 15, 14, 13, 11, 10, 10, 7, 12, 12, 12, 12, 6, 5, 5, 5, 4, 4, 3, 3, 3, 2, 0, 0)
+Major.Data.Z <- data.frame(Major = Majors.Z,
+                         Zeitgeist = vals.Z)
+    
+                         
+Majors.M <- c("Dance","Film & Media Culture","Music",
+              "Studio Art","Theatre","Classics","History",
+              "History-Science, Medicine, and Technology",
+              "Philosophy","Religion", "American Studies","Black Studies",
+              "Environmental Studies","Gender, Sexuality, & Feminist Studies",
+              "Independent Scholar",
+              "International Politics & Economics",
+              "International & Global Studies","Neuroscience","Arabic",
+              "Chinese",
+              "French","German","Italian",
+              "Japanese Studies","Russian","Spanish","Comparative Literature",
+              "English & American Literatures",
+              "Literary Studies","Biochemistry","Biology",  
+              "Chemistry","Computer Science","Geology","Mathematics",
+              "Molecular Biology & Biochemistry","Physics","Economics",
+              "Education Studies","Geography",
+              "Political Science","Psychology","Anthropology","Sociology",
+              "Undeclared", "I prefer not to answer", 
+              "History of Art & Architecture")
+
+vals.M <- c(5,43,19,15,21,9,55,0,24,11,8,3,166,13,6,80,75,152,9,
+                20,7,8,3,14,7,21,5,93,7,20,86,29,158,29,68,80,46,298,13,34,
+                99,118,41,30,923,0,61)
+                
+Major.Data.M <- data.frame(Major = Majors.M,
+                           Middlebury = vals.M)
+
+Major.Data.Raw <- merge(Major.Data.M, Major.Data.Z, all = TRUE)
+```  
+
+
+###Exhibit B
+#####Permutation Test for Class Category
+```{r}
+# Set seed so we get the same result every time
+set.seed(31)
+
+# Number of times that we will simulate samples for our sampling distribution 
+N <- 100000
+
+# The population of graduation years provided by the administration
+Population <- c(rep("2022", 600), rep("2023", 690),
+                rep("2024", 727), rep("2025",638))
+
+pop.size <- length(Population)
+
+# Expected proportions
+eprop22 <- 600/pop.size
+eprop23 <- 690/pop.size
+eprop24 <- 727/pop.size
+eprop25 <- 638/pop.size
+
+samp.size <- sum(Class.Data.Raw$Zeitgeist)
+
+# Expected values for sample of our size
+epop22 <- eprop22*samp.size
+epop23 <- eprop23*samp.size
+epop24 <- eprop24*samp.size
+epop25 <- eprop25*samp.size
+
+expected.values <- c(epop22, epop23, epop24, epop25)
+
+# test statistic is MAE
+actual.test.stat <- (1/4)*sum(abs(Class.Data.Raw$Zeitgeist - expected.values))
+
+test.stat <- NULL
+
+# Simulating our sampling distribution
+for(i in 1:N){
+  # Taking a sample from our population
+  samp <- sample(Population, samp.size, replace = FALSE)
+  
+  samp22 <- sum(samp == "2022")
+  samp23 <- sum(samp == "2023")
+  samp24 <- sum(samp == "2024")
+  samp25 <- sum(samp == "2025")
+  
+  actual.samp.values <- c(samp22,samp23,samp24,samp25)
+  
+  # Storing the test statistic for each simulated sample
+  test.stat[i] <- (1/4)*sum(abs(actual.samp.values - expected.values))
+}
+
+hist(test.stat)
+
+# p-value: probability of finding something more extreme than actual.test.stat
+mean(test.stat >= actual.test.stat)
+```
+
+###Exhibit C
+#####Permutation Test for Geography Category
+```{r}
+# The population of regions as given by the administration data
+Population <- c(rep("New England", 698), rep("Mideast", 604),
+                rep("Southeast", 203), rep("Great Lakes",164),
+                rep("Plains", 70), rep("Southwest", 78),
+                rep("Rocky Mountain",77), rep("Far West", 301))
+
+pop.size <- length(Population)
+
+# Expected proportions
+epropNE <- 698/pop.size
+epropME <- 604/pop.size
+epropSE <- 101/pop.size
+epropGL <- 164/pop.size
+epropP <- 70/pop.size
+epropSW <- 78/pop.size
+epropRM <- 77/pop.size
+epropFW <- 301/pop.size
+
+samp.size <- sum(Geography.Data.Raw$Zeitgeist[1:8])
+
+# Expected values in a sample our size
+epopNE <- epropNE*samp.size
+epopME <- epropME*samp.size
+epopSE <- epropSE*samp.size
+epopGL <- epropGL*samp.size
+epopP <- epropP*samp.size
+epopSW <- epropSW*samp.size
+epopRM <- epropRM*samp.size
+epopFW <- epropFW*samp.size
+
+expected.values <- c(epopNE, epopME, epopSE, epopGL,
+                     epopP, epopSW, epopRM, epopFW)
+
+#Don't want last two responses ("International" & "I prefer not to answer")
+actual.test.stat <- (1/8)*sum(abs(Geography.Data.Raw$Zeitgeist[1:8] - expected.values))
+
+test.stat <- NULL
+
+# Simulating our sampling distribution
+for(i in 1:N){
+  samp <- sample(Population, samp.size, replace = FALSE)
+  
+  sampNE <- sum(samp == "New England")
+  sampME <- sum(samp == "Mideast")
+  sampSE <- sum(samp == "Southeast")
+  sampGL <- sum(samp == "Great Lakes")
+  sampP <- sum(samp == "Plains")
+  sampSW <- sum(samp == "Southwest")
+  sampRM <- sum(samp == "Rocky Mountain")
+  sampFW <- sum(samp == "Far West")
+  
+  actual.samp.values <- c(sampNE, sampME, sampSE, sampGL,
+                          sampP, sampSW, sampRM, sampFW)
+  
+  # Computing the test stat for our sample
+  test.stat[i] <- (1/8)*sum(abs(actual.samp.values - expected.values))
+}
+
+hist(test.stat)
+
+# p-value: the probability of observing something rarer than actual.test.stat
+mean(test.stat >= actual.test.stat)
+```
