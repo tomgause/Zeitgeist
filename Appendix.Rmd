@@ -167,7 +167,7 @@ alpha.star <- 1 - (1-alpha)^(1/k)
 ```  
 
 ### C. Phase 1 Permutation Test for Class  
-```{r phase1.analysis.class}  
+```{r phase1.class}  
 # Number of times that we will simulate samples for our sampling distribution 
 N <- 100000
 # The population of graduation years provided by the administration
@@ -407,7 +407,7 @@ hist(test.stat, main = "Permuation Distribution for Major, Zeitgeist, Phase 1")
 p.value.race <- sum(real.test.stat < test.stat) / k
 print(paste0("Alpha-Star: ", alpha.star))
 print(paste0("P-Value: ", p.value.race))
-```
+```  
 
 
 ### H. Phase 2 Data Preparation    
@@ -498,7 +498,7 @@ print(paste0("Alpha-Star: ", alpha.star))
 print(paste0("P-Value: ", p.value.gender))
 ```  
 ### J. Phase 2 Permutation Test for Race  
-``` {r phase1.analysis.race}
+``` {r phase2.analysis.race}
 # Total Zeitgeist Responses
 n <- sum(Race.Data.Phase2$Zeitgeist)
 
@@ -565,7 +565,7 @@ print(paste0("Alpha-Star: ", alpha.star))
 print(paste0("P-Value: ", p.value.race))
 ```  
 ### K. Phase 2 Permutation Test for Major  
-``` {r phase1.analysis.major}
+``` {r phase2.analysis.major}
 n <- sum(Major.Data.Phase2$Zeitgeist)
 expected.prob.majors <- NULL
 expected.count.majors <- NULL
